@@ -18,12 +18,13 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *OrdererOrg
+                - *Org3
         Consortiums:
             SampleConsortium:
                 Organizations:
                     - *Org1
                     - *Org2
+                    - *Org3
             # SecondConsortium:
                 # Organizations:
                     # - *Org1
@@ -33,13 +34,21 @@ Profiles:
                     # - *Org2
                     # - *Org3
 
-    TwoOrgsChannel:
+    HospitalChannelOne:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
                 - *Org1
                 - *Org3
+
+    HospitalChannelTwo:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org2
+                - *Org3            
 
 ################################################################################
 #
@@ -53,13 +62,13 @@ Organizations:
 
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
-    - &OrdererOrg
+    - &Org3
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: OrdererOrg
+        Name: Org3Orderer
 
         # ID to load the MSP definition as
-        ID: OrdererMSP
+        ID: Org3OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/example.com/msp
@@ -97,6 +106,23 @@ Organizations:
             # encoded in the genesis block in the Application section context
             - Host: peer0.org2.example.com
               Port: 7051
+
+    - &Org3
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: Org3MSP
+
+        # ID to load the MSP definition as
+        ID: Org3MSP
+
+        MSPDir: crypto-config/peerOrganizations/org3.example.com/msp
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.org3.example.com
+              Port: 7051          
 
 ################################################################################
 #
